@@ -4,9 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NewsListScreen } from '../screens/news-list-screen';
 import { NewsDetailsScreen } from '../screens/news-details-screen';
 
+import type { Article } from '../types/news-api.types';
+
 export type RootStackParamList = {
   NewsList: undefined;
-  NewsDetails: undefined;
+  NewsDetails: { article: Article };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

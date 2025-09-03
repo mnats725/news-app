@@ -1,29 +1,61 @@
 import React from 'react';
+import { Image, Linking, ScrollView } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import styled from 'styled-components/native';
+import { formatDate } from '../../utils/format-date.utils';
 
-const Container = styled.SafeAreaView`
-  flex: 1;
-  background-color: #fff;
-  padding: 16px;
-`;
+import * as styles from './news-details-screen.styles';
 
-const Title = styled.Text`
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
-`;
+import type { RootStackParamList } from '../../navigation/root-navigator';
 
-const TextP = styled.Text`
-  font-size: 16px;
-  line-height: 22px;
-`;
+type Props = NativeStackScreenProps<RootStackParamList, 'NewsDetails'>;
 
-export const NewsDetailsScreen = () => {
+export const NewsDetailsScreen: React.FC<Props> = ({ route }) => {
+  const { article } = route.params;
+  const hasImage = Boolean(article.urlToImage);
+
+  const handleOpenInBrowser = () => {
+    if (article.url) {
+      Linking.openURL(article.url);
+    }
+  };
+
   return (
-    <Container>
-      <Title>Детальная страница (заглушка)</Title>
-      <TextP>Здесь позже будет контент новости.</TextP>
-    </Container>
+    <styles.Container>
+      <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+        {hasImage ? (
+          <Image
+            source={{ uri: article.urlToImage as string }}
+            style={{ width: '100%', height: 220 }}
+            resizeMode="cover"
+          />
+        ) : (
+          <styles.NoImageBox>
+            <styles.NoImageText>Нет изображения</styles.NoImageText>
+          </styles.NoImageBox>
+        )}
+
+        <styles.Title>{article.title}</styles.Title>
+        <styles.Meta>
+          {article.author ? `${article.author} • ` : ''}
+          {formatDate(article.publishedAt)}
+        </styles.Meta>
+
+        {article.description && (
+          <styles.Content>{article.description}</styles.Content>
+        )}
+        {article.content && (
+          <styles.Content>
+            {article.content.replace(/\[\+\d+ chars\]/, '')}
+          </styles.Content>
+        )}
+
+        {article.url && (
+          <styles.OpenButton onPress={handleOpenInBrowser}>
+            <styles.OpenButtonText>Открыть в браузере</styles.OpenButtonText>
+          </styles.OpenButton>
+        )}
+      </ScrollView>
+    </styles.Container>
   );
 };
