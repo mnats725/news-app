@@ -1,15 +1,19 @@
 import styled from 'styled-components/native';
 
-export const Row = styled.View`
-  flex-direction: row;
-  gap: 8px;
-`;
+export const Row = styled.ScrollView.attrs({
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+  contentContainerStyle: {
+    paddingHorizontal: 8,
+  },
+})``;
 
 export const Chip = styled.TouchableOpacity<{ selected?: boolean }>`
   padding: 8px 12px;
   border-radius: 16px;
   border: 1px solid ${({ selected }) => (selected ? '#222' : '#ddd')};
   background-color: ${({ selected }) => (selected ? '#222' : '#fff')};
+  margin-right: 8px;
 `;
 
 export const ChipText = styled.Text<{ selected?: boolean }>`

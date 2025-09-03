@@ -22,7 +22,13 @@ export type TopHeadlinesResponse = {
   message?: string;
 };
 
-export type UiCategory = 'technology' | 'sports' | 'politics';
+export type UiCategory =
+  | 'technology'
+  | 'sports'
+  | 'general'
+  | 'health'
+  | 'science'
+  | 'entertainment';
 
 export type HeadlinesParams = {
   page: number;

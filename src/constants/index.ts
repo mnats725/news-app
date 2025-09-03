@@ -3,4 +3,10 @@ export const NEWS_API_KEY = '4a381b113f8845cbb28eb89e12e80d77';
 export const PAGE_SIZE = 10;
 export const DEFAULT_COUNTRY = 'us';
 
-export type UiCategory = 'technology' | 'sports' | 'politics';
+export type UiCategory =
+  | 'technology'
+  | 'sports'
+  | 'general'
+  | 'health'
+  | 'science'
+  | 'entertainment';

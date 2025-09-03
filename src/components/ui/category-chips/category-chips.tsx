@@ -27,9 +27,12 @@ export const CategoryChips = ({
 
   return (
     <styles.Row>
+      {renderChip('Главное', 'general')}
       {renderChip('Технологии', 'technology')}
       {renderChip('Спорт', 'sports')}
-      {renderChip('Политика', 'politics')}
+      {renderChip('Наука', 'science')}
+      {renderChip('Культура', 'entertainment')}
+      {renderChip('Здоровье', 'health')}
     </styles.Row>
   );
 };
