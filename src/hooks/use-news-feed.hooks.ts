@@ -74,14 +74,22 @@ export const useNewsFeed = (): UseNewsFeedResult => {
         const total = response.totalResults ?? 0;
 
         if (mode === 'more') {
-          setArticles(prevArticles => [...prevArticles, ...newArticles]);
+          setArticles(prev => [...prev, ...newArticles]);
         }
-        if (mode !== 'more') setArticles(newArticles);
+        if (mode !== 'more') {
+          setArticles(newArticles);
+        }
 
         setTotalResults(total);
         setCurrentPage(targetPage);
-      } catch (error: any) {
-        setErrorMessage(error?.message || 'Ошибка загрузки новостей');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.log('[getTopHeadlines error]', err.message);
+          setErrorMessage(err.message);
+        } else {
+          console.log('[getTopHeadlines error] unknown', err);
+          setErrorMessage('Неизвестная ошибка');
+        }
       } finally {
         setIsInitialLoading(false);
         setIsLoadingMore(false);
@@ -96,10 +104,13 @@ export const useNewsFeed = (): UseNewsFeedResult => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    fetchNewsPage(1, 'initial');
+  }, [selectedCategory, fetchNewsPage]);
+
   const loadMore = useCallback(() => {
-    if (isInitialLoading || isLoadingMore || isRefreshing || !canLoadMore) {
+    if (isInitialLoading || isLoadingMore || isRefreshing || !canLoadMore)
       return;
-    }
     fetchNewsPage(currentPage + 1, 'more');
   }, [
     canLoadMore,
@@ -111,9 +122,7 @@ export const useNewsFeed = (): UseNewsFeedResult => {
   ]);
 
   const refresh = useCallback(() => {
-    if (isRefreshing || isInitialLoading) {
-      return;
-    }
+    if (isRefreshing || isInitialLoading) return;
     fetchNewsPage(1, 'refresh');
   }, [fetchNewsPage, isInitialLoading, isRefreshing]);
 
@@ -124,9 +133,8 @@ export const useNewsFeed = (): UseNewsFeedResult => {
   const setSelectedCategory = useCallback(
     (category: UiCategory | undefined) => {
       setSelectedCategoryState(category);
-      fetchNewsPage(1, 'initial');
     },
-    [fetchNewsPage],
+    [],
   );
 
   const resetFeed = useCallback(() => {

@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import { FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { useNewsFeed } from '../../hooks/use-news-feed.hooks';
 import { keyFromArticle } from '../../utils/key-from-article.utils';
 
@@ -9,10 +11,16 @@ import * as styles from './news-list-screen.styles';
 import { QueryBar } from '../../components/ui/query-bar';
 import { CategoryChips } from '../../components/ui/category-chips';
 import { NewsCard } from '../../components/ui/news-card';
+import { ErrorBox } from '../../components/ui/error-box';
 
 import type { Article, UiCategory } from '../../types/news-api.types';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../../navigation/root-navigator';
 
 export const NewsListScreen: React.FC = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const {
     articles,
     isInitialLoading,
@@ -35,8 +43,13 @@ export const NewsListScreen: React.FC = () => {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Article }) => <NewsCard article={item} />,
-    [],
+    ({ item }: { item: Article }) => (
+      <NewsCard
+        article={item}
+        onPress={article => navigation.navigate('NewsDetails', { article })}
+      />
+    ),
+    [navigation],
   );
 
   const listFooter = useCallback(() => {
@@ -78,12 +91,7 @@ export const NewsListScreen: React.FC = () => {
       </styles.Header>
 
       {Boolean(errorMessage) && (
-        <styles.ErrorBox>
-          <styles.ErrorText>{errorMessage}</styles.ErrorText>
-          <styles.RetryBtn onPress={refresh}>
-            <styles.RetryText>Повторить</styles.RetryText>
-          </styles.RetryBtn>
-        </styles.ErrorBox>
+        <ErrorBox message={errorMessage!} onRetry={refresh} />
       )}
 
       <FlatList

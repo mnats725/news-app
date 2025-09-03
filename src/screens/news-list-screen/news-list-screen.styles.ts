@@ -91,28 +91,3 @@ export const Meta = styled.Text`
   font-size: 12px;
   color: #666;
 `;
-
-export const ErrorBox = styled.View`
-  background-color: #fee2e2;
-  border: 1px solid #fecaca;
-  margin: 8px 16px 0 16px;
-  padding: 10px 12px;
-  border-radius: 10px;
-`;
-
-export const ErrorText = styled.Text`
-  color: #b91c1c;
-`;
-
-export const RetryBtn = styled.TouchableOpacity`
-  margin-top: 8px;
-  align-self: flex-start;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background-color: #b91c1c;
-`;
-
-export const RetryText = styled.Text`
-  color: #fff;
-  font-weight: 600;
-`;
