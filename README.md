@@ -42,7 +42,7 @@ yarn start
 yarn android # или yarn ios
 ```
 
-## Установка и запуск
+## Переменные окружения и константы
 
 ```typescript
 export const NEWS_API_BASE_URL = '';
